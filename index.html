@@ -1,277 +1,159 @@
 <!DOCTYPE html>
-<html lang="id">
+<html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ramadan 1447H - Deska</title>
+<title>Ramadan App - Deska</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+<link rel="manifest" href="manifest.json">
 
 <style>
 body{
-margin:0;
-overflow-x:hidden;
-font-family:'Poppins',sans-serif;
-background:linear-gradient(to bottom,#0c1326,#0f1d3f);
-color:#f5d38a;
-text-align:center;
+    margin:0;
+    font-family:Arial, sans-serif;
+    background:#0f172a;
+    color:#facc15;
+    text-align:center;
+    overflow-x:hidden;
 }
 
-canvas{
-position:fixed;
-top:0;
-left:0;
-z-index:-1;
+/* Bintang */
+.star{
+    position:fixed;
+    width:2px;
+    height:2px;
+    background:white;
+    animation:starMove linear infinite;
 }
 
-.container{
-padding:40px 20px;
-max-width:900px;
-margin:auto;
+@keyframes starMove{
+    from{transform:translateY(-10px);}
+    to{transform:translateY(100vh);}
 }
 
-h1{
-font-family:'Playfair Display',serif;
-font-size:48px;
-margin-bottom:10px;
-animation:fadeIn 2s ease-in-out;
+.logo{
+    font-size:35px;
+    font-weight:bold;
+    color:#facc15;
+    text-shadow:0 0 15px #facc15;
+    margin-top:20px;
 }
 
-.subtitle{
-opacity:.8;
-margin-bottom:30px;
-}
-
-.quote{
-font-style:italic;
-max-width:600px;
-margin:30px auto;
-line-height:1.6;
-}
-
-.countdown-box{
-background:rgba(255,255,255,0.05);
-padding:30px;
-border-radius:20px;
-box-shadow:0 0 40px rgba(255,215,0,0.2);
-margin-top:30px;
-}
-
-.time-grid{
-display:grid;
-grid-template-columns:repeat(2,1fr);
-gap:20px;
-margin-top:20px;
-}
-
-.time-card{
-background:rgba(255,255,255,0.08);
-padding:25px;
-border-radius:15px;
-transition:0.3s;
-}
-
-.time-card:hover{
-transform:scale(1.05);
-}
-
-.time-card h2{
-font-size:36px;
-margin:0;
-}
-
-.status{
-margin-top:20px;
-font-size:16px;
-}
-
-.section{
-margin-top:60px;
-}
-
-.doa{
-background:rgba(255,255,255,0.05);
-padding:20px;
-border-radius:15px;
-margin:15px 0;
-text-align:left;
+.card{
+    background:#1e293b;
+    margin:15px;
+    padding:20px;
+    border-radius:15px;
 }
 
 button{
-background:#f5d38a;
-color:#111;
-border:none;
-padding:12px 20px;
-border-radius:30px;
-cursor:pointer;
-margin:10px;
-font-weight:600;
-}
-
-button:hover{
-opacity:.8;
-}
-
-footer{
-margin-top:60px;
-padding:20px;
-opacity:.6;
-}
-
-@keyframes fadeIn{
-from{opacity:0;transform:translateY(-20px);}
-to{opacity:1;transform:translateY(0);}
+    padding:10px 20px;
+    margin:5px;
+    border:none;
+    border-radius:8px;
+    background:#facc15;
+    color:black;
+    font-weight:bold;
 }
 </style>
 </head>
 
 <body>
 
-<canvas id="stars"></canvas>
+<div class="logo">🌙 DESKA</div>
+<p>Developer: Deska</p>
 
-<div class="container">
-
-<h1>Ramadan</h1>
-<div class="subtitle">1447 H / 2026 M</div>
-
-<div class="quote">
-"Barangsiapa berpuasa Ramadan dengan iman dan mengharap pahala,
-niscaya diampuni dosa-dosanya yang telah lalu." <br>
-— HR. Bukhari & Muslim
-</div>
-
-<div class="countdown-box">
+<div class="card">
 <h2>Hitung Mundur Ramadan</h2>
-
-<div class="time-grid">
-<div class="time-card">
-<h2 id="days">0</h2>
-<span>HARI</span>
-</div>
-<div class="time-card">
-<h2 id="hours">0</h2>
-<span>JAM</span>
-</div>
-<div class="time-card">
-<h2 id="minutes">0</h2>
-<span>MENIT</span>
-</div>
-<div class="time-card">
-<h2 id="seconds">0</h2>
-<span>DETIK</span>
+<div>
+<span id="hari">0</span> Hari |
+<span id="jam">0</span> Jam |
+<span id="menit">0</span> Menit |
+<span id="detik">0</span> Detik
 </div>
 </div>
 
-<div class="status" id="statusText"></div>
-
-<button onclick="toggleMusic()">🎵 Musik</button>
-<button onclick="shareWA()">📲 Share WhatsApp</button>
-
+<div class="card">
+<h2>🕌 Jadwal Sholat (Auto Lokasi)</h2>
+<p>Subuh: <span id="subuh">-</span></p>
+<p>Dzuhur: <span id="dzuhur">-</span></p>
+<p>Ashar: <span id="ashar">-</span></p>
+<p>Maghrib: <span id="maghrib">-</span></p>
+<p>Isya: <span id="isya">-</span></p>
 </div>
 
-<div class="section">
-<h2>Doa-Doa Ramadan</h2>
-
-<div class="doa">
-<b>Doa Niat Puasa:</b><br>
-Nawaitu shauma ghadin 'an ada'i fardhi syahri Ramadhana hadzihis sanati lillahi ta'ala.
+<div class="card">
+<h2>🔔 Notifikasi</h2>
+<button onclick="aktifNotif()">Aktifkan Notifikasi</button>
 </div>
 
-<div class="doa">
-<b>Doa Berbuka:</b><br>
-Allahumma laka shumtu wa bika aamantu wa 'ala rizqika afthartu.
-</div>
-
-<div class="doa">
-<b>Doa Lailatul Qadar:</b><br>
-Allahumma innaka 'afuwwun tuhibbul 'afwa fa'fu 'anni.
-</div>
-
-</div>
-
-<footer>
-Website dibuat oleh <b>Deska</b> 🚀
+<footer style="margin-top:30px;color:#64748b;">
+© 2026 Ramadan App - Developer Deska
 </footer>
 
-</div>
-
-<audio id="bgMusic" loop>
-<source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mp3">
-</audio>
-
 <script>
-const ramadanDate = new Date("March 1, 2026 00:00:00").getTime();
 
-function updateCountdown(){
-const now = new Date().getTime();
-const distance = ramadanDate - now;
-
-if(distance < 0){
-document.getElementById("statusText").innerHTML =
-"🌙 Ramadan sedang berlangsung — semoga penuh berkah!";
-return;
-}
-
-document.getElementById("days").innerText =
-Math.floor(distance/(1000*60*60*24));
-
-document.getElementById("hours").innerText =
-Math.floor((distance%(1000*60*60*24))/(1000*60*60));
-
-document.getElementById("minutes").innerText =
-Math.floor((distance%(1000*60*60))/(1000*60));
-
-document.getElementById("seconds").innerText =
-Math.floor((distance%(1000*60))/1000);
-
-document.getElementById("statusText").innerHTML =
-"Menunggu datangnya Ramadan...";
-}
-
-setInterval(updateCountdown,1000);
-updateCountdown();
-
-function toggleMusic(){
-const music = document.getElementById("bgMusic");
-music.paused ? music.play() : music.pause();
-}
-
-function shareWA(){
-const url = window.location.href;
-window.open(`https://wa.me/?text=Yuk%20lihat%20Countdown%20Ramadan%20ini:%20${url}`);
-}
-
-/* Animasi Bintang */
-const canvas = document.getElementById("stars");
-const ctx = canvas.getContext("2d");
-
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
-
-let stars = [];
-
+/* Bintang */
 for(let i=0;i<100;i++){
-stars.push({
-x:Math.random()*canvas.width,
-y:Math.random()*canvas.height,
-radius:Math.random()*2,
-speed:Math.random()*0.5
-});
+ let star=document.createElement("div");
+ star.className="star";
+ star.style.left=Math.random()*100+"vw";
+ star.style.animationDuration=(Math.random()*5+5)+"s";
+ document.body.appendChild(star);
 }
 
-function drawStars(){
-ctx.clearRect(0,0,canvas.width,canvas.height);
-ctx.fillStyle="#f5d38a";
-stars.forEach(star=>{
-ctx.beginPath();
-ctx.arc(star.x,star.y,star.radius,0,Math.PI*2);
-ctx.fill();
-star.y+=star.speed;
-if(star.y>canvas.height) star.y=0;
+/* Countdown */
+let ramadan=new Date("March 23, 2026 00:00:00").getTime();
+setInterval(()=>{
+ let now=new Date().getTime();
+ let d=ramadan-now;
+
+ document.getElementById("hari").innerText=Math.floor(d/(1000*60*60*24));
+ document.getElementById("jam").innerText=Math.floor((d%(1000*60*60*24))/(1000*60*60));
+ document.getElementById("menit").innerText=Math.floor((d%(1000*60*60))/(1000*60));
+ document.getElementById("detik").innerText=Math.floor((d%(1000*60))/1000);
+},1000);
+
+/* Jadwal Sholat API */
+navigator.geolocation.getCurrentPosition(pos=>{
+ let lat=pos.coords.latitude;
+ let lon=pos.coords.longitude;
+
+ fetch(`https://api.aladhan.com/v1/timings?latitude=${lat}&longitude=${lon}&method=2`)
+ .then(res=>res.json())
+ .then(data=>{
+   let t=data.data.timings;
+   document.getElementById("subuh").innerText=t.Fajr;
+   document.getElementById("dzuhur").innerText=t.Dhuhr;
+   document.getElementById("ashar").innerText=t.Asr;
+   document.getElementById("maghrib").innerText=t.Maghrib;
+   document.getElementById("isya").innerText=t.Isha;
+ });
 });
-requestAnimationFrame(drawStars);
+
+/* Notifikasi */
+function aktifNotif(){
+ if(Notification.permission!=="granted"){
+   Notification.requestPermission();
+ }
+ alert("Notifikasi Aktif");
 }
-drawStars();
+
+setInterval(()=>{
+ let now=new Date();
+ let time=now.getHours()+":"+String(now.getMinutes()).padStart(2,'0');
+
+ let maghrib=document.getElementById("maghrib").innerText;
+ let subuh=document.getElementById("subuh").innerText;
+
+ if(time===subuh){
+   new Notification("Waktu Sahur 🌙 - Developer Deska");
+ }
+ if(time===maghrib){
+   new Notification("Waktu Berbuka 🍽️ - Developer Deska");
+ }
+},60000);
+
 </script>
 
 </body>
