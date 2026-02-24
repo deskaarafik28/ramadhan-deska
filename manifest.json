@@ -1,0 +1,9 @@
+{
+  "name": "Ramadan App - Deska",
+  "short_name": "Ramadan Deska",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#facc15",
+  "icons": []
+}
